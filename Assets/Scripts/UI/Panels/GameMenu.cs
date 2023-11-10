@@ -1,20 +1,18 @@
-using Entities.Level;
-using Services;
 using TMPro;
 using UnityEngine;
 
-namespace Entities.UI.Panels
+namespace UI.Panels
 {
     public class GameMenu : BaseView
     {
         [SerializeField] private TMP_Text _score;
         [SerializeField] private GameObject _wrongMessagePanel;
         [SerializeField] private GameObject _correctMessagePanel;
-        [SerializeField] private LevelDataConfig _levelDataConfig;
+        [SerializeField] private int _delayTimeForOffPanel;
 
-        public void ShowNewScore(int score)
+        public void ShowNewScore(int value)
         {
-            _score.SetText( score + "/10");
+            _score.SetText( $"Score: {value} /10");
         }
 
         public void ShowWrongAnswerMessage()
@@ -33,7 +31,7 @@ namespace Entities.UI.Panels
         
         private System.Collections.IEnumerator HidePanelAfterDelay(GameObject panel)
         {
-            var delayTime = _levelDataConfig.DelayTimeForOffPanel;
+            var delayTime = _delayTimeForOffPanel;
         
             yield return new WaitForSeconds(delayTime);
 

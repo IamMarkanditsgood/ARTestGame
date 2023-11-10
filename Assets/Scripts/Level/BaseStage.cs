@@ -1,11 +1,11 @@
 using Entities.Numbers.Data;
 
-namespace Entities.Level
+namespace Level
 {
     public abstract class BaseStage
     {
         protected InteractableNumbersData InteractableNumbers;
-        
+
         public abstract void PlayStage();
     }
 }

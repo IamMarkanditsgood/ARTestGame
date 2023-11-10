@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using Entities.Numbers;
 using Entities.Numbers.Data;
 using Services;
+using Sounds;
 using UnityEngine;
 
-namespace Entities.Level.LevelStages
+namespace Level.LevelStages
 {
     [Serializable]
     public class StageRepetition: BaseStage
@@ -17,13 +18,17 @@ namespace Entities.Level.LevelStages
         [SerializeField] private List<int> _availableNumbers = new();
 
         private LevelDataConfig _levelDataConfig;
+        private AudioSource _audioSource;
+        private SoundsConfig _sounds;
         
         private readonly CancellationTokenSource _cancellationTokenSource = new();
 
         public event Action OnNextStage;
         
-        public void Initialize(InteractableNumbersData interactableNumbers, LevelDataConfig levelDataConfig)
+        public void Initialize(InteractableNumbersData interactableNumbers, LevelDataConfig levelDataConfig, AudioSource audioSource,SoundsConfig sounds )
         {
+            _audioSource = audioSource;
+            _sounds = sounds;
             InteractableNumbers = interactableNumbers;
             _levelDataConfig = levelDataConfig;
             InitAvailableNumbers(10);
@@ -90,6 +95,8 @@ namespace Entities.Level.LevelStages
         private void ShowNextNumber()
         {
             int randomNumber = GetRandomNumber();
+            AudioClip numberVoice = _sounds.GetNumberVoice(randomNumber);
+            SoundsManager.RunSound(_audioSource,numberVoice );
             InteractableNumbers.ShowInteractableNumber(randomNumber);
             _numberControl.SetNumber(randomNumber);
         }

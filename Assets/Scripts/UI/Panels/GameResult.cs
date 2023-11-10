@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Entities.UI.Panels
+namespace UI.Panels
 {
     public class GameResult : BaseView
     {

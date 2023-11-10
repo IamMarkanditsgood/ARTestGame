@@ -12,7 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb633b6c3ac4888b0114a16ee43c62b, type: 3}
   m_Name: LevelData
   m_EditorClassIdentifier: 
-  _timeBetweenNumbers: 1
-  _timeBetweenStages: 5
+  _timeBetweenNumbers: 2
   _scoreForWin: 10
-  _delayTimeForOffPanel: 4

@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Entities.Camera;
 using Entities.Numbers.Data;
 using Services;
+using Sounds;
 using UnityEngine;
 using Random = System.Random;
 
-namespace Entities.Level.LevelStages
+namespace Level.LevelStages
 {
     [Serializable]
     public class StageTest: BaseStage, IDisposable
@@ -21,7 +23,10 @@ namespace Entities.Level.LevelStages
         private int _score;
         private bool _waitForAnswer;
         private bool _isStageStarted;
+        private bool _isAwaitInUse;
         private LevelDataConfig _levelDataConfig;
+        private AudioSource _audioSource;
+        private SoundsConfig _sounds;
         
         private readonly CancellationTokenSource _cancellationTokenSource = new();
 
@@ -29,11 +34,12 @@ namespace Entities.Level.LevelStages
         public event Action OnCorrectAnswer;
         public event Action OnWrongAnswer;
         
-        public void Initialize(InteractableNumbersData interactableNumbers, int score, LevelDataConfig levelDataConfig)
+        public void Initialize(InteractableNumbersData interactableNumbers, LevelDataConfig levelDataConfig, AudioSource audioSource,SoundsConfig sounds )
         {
+            _audioSource = audioSource;
+            _sounds = sounds;
             InteractableNumbers = interactableNumbers;
             _levelDataConfig = levelDataConfig;
-            _score = score;
             Subscribe();
         }
         
@@ -57,9 +63,10 @@ namespace Entities.Level.LevelStages
             TaskCompletionSource<bool> completionSource = new();
             cancellationToken.Register(() => completionSource.TrySetCanceled());
             
-            Debug.Log("Put voice for explenation");
+            SoundsManager.RunSound(_audioSource,_sounds.TestStage);
+            int delayTime = SoundsManager.GetTimeOfSound(_sounds.TestStage) + 1;
             
-            await Task.Delay(_levelDataConfig.TimeBetweenStages * Constants.SecondsByMillisecond, cancellationToken);
+            await Task.Delay(delayTime * Constants.SecondsByMillisecond, cancellationToken);
             
             _isStageStarted = true;
         }
@@ -71,19 +78,21 @@ namespace Entities.Level.LevelStages
 
         private async void CheckStageStatus()
         {
-            if (!_isStageStarted)
+            if (!_isAwaitInUse)
             {
+                _isAwaitInUse = true;
                 await WaitForNextStage(_cancellationTokenSource.Token);
-                return;
             }
-            
-            if (_score < _levelDataConfig.ScoreForWin && !_waitForAnswer)
+            if (_isStageStarted)
             {
-                SetQuestion();
-            }
-            else if(_score == _levelDataConfig.ScoreForWin)
-            {
-                OnWin?.Invoke();
+                if (_score < _levelDataConfig.ScoreForWin && !_waitForAnswer)
+                {
+                    SetQuestion();
+                }
+                else if(_score == _levelDataConfig.ScoreForWin)
+                {
+                    OnWin?.Invoke();
+                }
             }
         }
         
@@ -115,6 +124,8 @@ namespace Entities.Level.LevelStages
         private void SetNumberForQuestion()
         {
             int randomNumber = _random.Next(1, 11);
+            AudioClip numberVoice = _sounds.GetNumberVoice(randomNumber);
+            SoundsManager.RunSound(_audioSource,numberVoice );
             _questionNumber = randomNumber;
         }
         

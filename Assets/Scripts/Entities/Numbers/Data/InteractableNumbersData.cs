@@ -1,3 +1,4 @@
+using Sounds;
 using UnityEngine;
 
 namespace Entities.Numbers.Data
@@ -5,9 +6,12 @@ namespace Entities.Numbers.Data
     public class InteractableNumbersData : MonoBehaviour
     {
         [SerializeField] private GameObject[] _numbers;
+        [SerializeField] private SoundsConfig _sounds;
+        [SerializeField] private AudioSource _soundSource;
 
         public void ShowInteractableNumber(int numberIndex)
         {
+            SoundsManager.RunSound(_soundSource, _sounds.Appearing);
             _numbers[numberIndex-1].SetActive(true);
         }
         public GameObject GetNumber(int number)

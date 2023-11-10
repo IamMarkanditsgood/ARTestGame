@@ -1,25 +1,26 @@
 using System;
-using Entities.UI.Panels;
+using Sounds;
+using UI.Panels;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Entities.UI
+namespace UI
 {
     public class ScreensController : MonoBehaviour
     {
         [SerializeField] private MainMenu _mainMenu;
         [SerializeField] private GameMenu _gameMenu;
         [SerializeField] private GameResult _gameResult;
-
+        [SerializeField] private AudioSource _audioSource;
+        [SerializeField] private SoundsConfig _sounds;
+        
         private BaseView _activeScreen;
-        private BaseView[] _scenes;
 
         public event Action OnPlay;
 
         private void Start()
         {
             _activeScreen = _mainMenu;
-            SetLevelPanels();
             Subscribe();
         }
 
@@ -30,16 +31,15 @@ namespace Entities.UI
         
         private void Subscribe()
         {
-            _mainMenu.OnPlay += ShowGameInterface;
+            _mainMenu.OnPlay += ShowGameMenu;
             _gameResult.OnRestart += RestartLevel;
         }
         
         private void Unsubscribe()
         {
-            _mainMenu.OnPlay -= ShowGameInterface;
+            _mainMenu.OnPlay -= ShowGameMenu;
             _gameResult.OnRestart -= RestartLevel;
         }
-        private void SetLevelPanels() => _scenes = new BaseView[] {_mainMenu, _gameMenu, _gameResult};
 
         private void ShowScreen(BaseView nextScreen)
         {
@@ -51,21 +51,23 @@ namespace Entities.UI
             nextScreen.Show();
         }
 
-        private void ShowGameInterface()
+        private void ShowGameMenu()
         {
+            SoundsManager.RunSound(_audioSource, _sounds.PressButton);
             OnPlay?.Invoke();
-            ShowScreen(_scenes[1]);
+            ShowScreen(_gameMenu);
         }
 
         private void RestartLevel()
         {
+            SoundsManager.RunSound(_audioSource, _sounds.PressButton);
             int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
             SceneManager.LoadScene(currentSceneIndex);
         }
         
         public void ShowGameResult()
         {
-            ShowScreen(_scenes[2]);
+            ShowScreen(_gameResult);
         }
 
         public void ChangeScore(int newScore)

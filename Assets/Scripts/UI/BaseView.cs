@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Entities.UI
+namespace UI
 {
     public abstract class BaseView: MonoBehaviour
     {
