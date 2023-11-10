@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Entities.Camera;
 using Entities.Numbers.Data;
+using Services;
 using UnityEngine;
 using Random = System.Random;
 
@@ -20,6 +21,7 @@ namespace Entities.Level.LevelStages
         private int _score;
         private bool _waitForAnswer;
         private bool _isStageStarted;
+        private LevelDataConfig _levelDataConfig;
         
         private readonly CancellationTokenSource _cancellationTokenSource = new();
 
@@ -27,9 +29,10 @@ namespace Entities.Level.LevelStages
         public event Action OnCorrectAnswer;
         public event Action OnWrongAnswer;
         
-        public  void Initialize(InteractableNumbersData interactableNumbers, int score)
+        public void Initialize(InteractableNumbersData interactableNumbers, int score, LevelDataConfig levelDataConfig)
         {
             InteractableNumbers = interactableNumbers;
+            _levelDataConfig = levelDataConfig;
             _score = score;
             Subscribe();
         }
@@ -56,7 +59,7 @@ namespace Entities.Level.LevelStages
             
             Debug.Log("Put voice for explenation");
             
-            await Task.Delay(Constants.TimeBetweenStages * Constants.SecondsByMillisecond, cancellationToken);
+            await Task.Delay(_levelDataConfig.TimeBetweenStages * Constants.SecondsByMillisecond, cancellationToken);
             
             _isStageStarted = true;
         }
@@ -74,11 +77,11 @@ namespace Entities.Level.LevelStages
                 return;
             }
             
-            if (_score < Constants.ScoreForWin && !_waitForAnswer)
+            if (_score < _levelDataConfig.ScoreForWin && !_waitForAnswer)
             {
                 SetQuestion();
             }
-            else if(_score == Constants.ScoreForWin)
+            else if(_score == _levelDataConfig.ScoreForWin)
             {
                 OnWin?.Invoke();
             }

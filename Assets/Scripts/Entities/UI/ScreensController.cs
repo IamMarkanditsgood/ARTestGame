@@ -25,7 +25,7 @@ namespace Entities.UI
 
         private void OnDestroy()
         {
-            UnSubscribe();
+            Unsubscribe();
         }
         
         private void Subscribe()
@@ -34,7 +34,7 @@ namespace Entities.UI
             _gameResult.OnRestart += RestartLevel;
         }
         
-        private void UnSubscribe()
+        private void Unsubscribe()
         {
             _mainMenu.OnPlay -= ShowGameInterface;
             _gameResult.OnRestart -= RestartLevel;

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Entities.Numbers;
 using Entities.Numbers.Data;
+using Services;
 using UnityEngine;
 
 namespace Entities.Level.LevelStages
@@ -13,18 +14,19 @@ namespace Entities.Level.LevelStages
     {
         [SerializeField] private NumberControl _numberControl;
         [SerializeField] private bool _inUse;
-        
         [SerializeField] private List<int> _availableNumbers = new();
-        private System.Random _random = new();
+
+        private LevelDataConfig _levelDataConfig;
         
         private readonly CancellationTokenSource _cancellationTokenSource = new();
 
         public event Action OnNextStage;
         
-        public void Initialize(InteractableNumbersData interactableNumbers)
+        public void Initialize(InteractableNumbersData interactableNumbers, LevelDataConfig levelDataConfig)
         {
             InteractableNumbers = interactableNumbers;
-            InitAvailableNumbers();
+            _levelDataConfig = levelDataConfig;
+            InitAvailableNumbers(10);
         }
         
         public override void PlayStage()
@@ -37,7 +39,7 @@ namespace Entities.Level.LevelStages
             TaskCompletionSource<bool> completionSource = new();
             cancellationToken.Register(() => completionSource.TrySetCanceled());
         
-            await Task.Delay(Constants.TimeBetweenNumbers * Constants.SecondsByMillisecond, cancellationToken);
+            await Task.Delay(_levelDataConfig.TimeBetweenNumbers * Constants.SecondsByMillisecond, cancellationToken);
             
             _inUse = false;
         }
@@ -47,9 +49,9 @@ namespace Entities.Level.LevelStages
             _cancellationTokenSource.Cancel();
         }
         
-        private void InitAvailableNumbers()
+        private void InitAvailableNumbers(int maxNumber)
         {
-            for (int i = 1; i <= 10; i++)
+            for (int i = 1; i <= maxNumber; i++)
             {
                 _availableNumbers.Add(i);
             }
@@ -57,13 +59,17 @@ namespace Entities.Level.LevelStages
 
         private void CheckAvailableNumbers()
         {
-            if (_availableNumbers.Count >= 1 && !_inUse)
+            if (!_inUse)
             {
-                ContinueStage();
-            }
-            else if(_availableNumbers.Count == 0 && !_inUse)
-            {
-                FinishStage();
+                switch (_availableNumbers.Count)
+                {
+                    case >= 1:
+                        ContinueStage();
+                        break;
+                    case 0:
+                        FinishStage();
+                        break;
+                }
             }
         }
 
@@ -90,11 +96,12 @@ namespace Entities.Level.LevelStages
 
         private int GetRandomNumber()
         {
-            int randomIndex = _random.Next(0, _availableNumbers.Count);
+            int randomIndex = UnityEngine.Random.Range(0, _availableNumbers.Count);
             int uniqueRandomNumber = _availableNumbers[randomIndex];
             _availableNumbers.RemoveAt(randomIndex);
             
             return uniqueRandomNumber;
         }
     }
+    
 }

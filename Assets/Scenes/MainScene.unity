@@ -433,6 +433,7 @@ MonoBehaviour:
   _stageRepetition:
     _numberControl: {fileID: 2055443211}
     _inUse: 0
+    _availableNumbers: 
   _stageTest:
     _wordData:
     - {fileID: 2022824366}
@@ -451,6 +452,7 @@ MonoBehaviour:
   _interactableNumbers: {fileID: 1588261380}
   _currentStageIndex: 0
   _isGameStarted: 0
+  _levelDataConfig: {fileID: 11400000, guid: 240ed722c585ea14195c6531b0719646, type: 2}
 --- !u!114 &124329157 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5149952914438484254, guid: e6f64fc5f8663184fb241903e4227743, type: 3}
@@ -2273,6 +2275,7 @@ MonoBehaviour:
   _score: {fileID: 315989040}
   _wrongMessagePanel: {fileID: 716229541}
   _correctMessagePanel: {fileID: 79375663}
+  _levelDataConfig: {fileID: 11400000, guid: 240ed722c585ea14195c6531b0719646, type: 2}
 --- !u!1 &1760120857
 GameObject:
   m_ObjectHideFlags: 0

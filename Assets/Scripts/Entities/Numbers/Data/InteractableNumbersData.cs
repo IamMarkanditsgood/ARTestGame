@@ -17,14 +17,16 @@ namespace Entities.Numbers.Data
 
         public int GetIndex(GameObject choosedObject)
         {
+            int index = 0;
             for (int i = 0; i < _numbers.Length; i++)
             {
                 if (choosedObject == _numbers[i].gameObject)
                 {
-                    return i + 1;
+                    index = i + 1;
+                    return index;
                 }
             }
-            return 0;
+            return index;
         }
     }
 }

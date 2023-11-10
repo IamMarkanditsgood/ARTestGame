@@ -1,4 +1,5 @@
 using Entities.Level;
+using Services;
 using TMPro;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Entities.UI.Panels
         [SerializeField] private TMP_Text _score;
         [SerializeField] private GameObject _wrongMessagePanel;
         [SerializeField] private GameObject _correctMessagePanel;
+        [SerializeField] private LevelDataConfig _levelDataConfig;
 
         public void ShowNewScore(int score)
         {
@@ -31,7 +33,7 @@ namespace Entities.UI.Panels
         
         private System.Collections.IEnumerator HidePanelAfterDelay(GameObject panel)
         {
-            var delayTime = Constants.DelayTimeForOffPanel;
+            var delayTime = _levelDataConfig.DelayTimeForOffPanel;
         
             yield return new WaitForSeconds(delayTime);
 

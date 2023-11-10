@@ -13,7 +13,7 @@ namespace Entities.Level
         [SerializeField] private InteractableNumbersData _interactableNumbers;
         [SerializeField] private int _currentStageIndex;
         [SerializeField] private bool _isGameStarted;
-        
+        [SerializeField] private LevelDataConfig _levelDataConfig;
         private BaseStage _currentStage;
         private BaseStage[] _stagesInLevel;
         private int _score;
@@ -31,7 +31,7 @@ namespace Entities.Level
 
         private void OnDestroy()
         {
-            UnSubscribe();
+            Unsubscribe();
         }
 
         private void Subscribe()
@@ -43,7 +43,7 @@ namespace Entities.Level
             _stageTest.OnWrongAnswer += WrongAnswer;
         }
         
-        private void UnSubscribe()
+        private void Unsubscribe()
         {
             _screensController.OnPlay -= StartGame;
             _stageRepetition.OnNextStage -= ChangeCurrentStage;
@@ -54,8 +54,9 @@ namespace Entities.Level
 
         private void InitializeStages()
         {
-            _stageRepetition.Initialize(_interactableNumbers);
-            _stageTest.Initialize(_interactableNumbers, _score);
+            
+            _stageRepetition.Initialize(_interactableNumbers, _levelDataConfig);
+            _stageTest.Initialize(_interactableNumbers, _score, _levelDataConfig);
             _currentStage = _stageRepetition;
             _stagesInLevel = new BaseStage[] { _stageRepetition, _stageTest };
         }
