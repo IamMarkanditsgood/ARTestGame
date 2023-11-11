@@ -1,11 +1,13 @@
+using Audio;
 using UnityEngine;
 
-namespace UI
+namespace UI.Screens
 {
-    public abstract class BaseView: MonoBehaviour
+    public abstract class BaseScreen: MonoBehaviour
     {
         [SerializeField] protected GameObject _screen;
-
+        protected readonly AudioManager AudioManager = AudioManager.Instance;
+        
         public virtual void Show()
         {
             _screen.SetActive(true);

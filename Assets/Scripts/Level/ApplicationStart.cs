@@ -1,15 +1,17 @@
-﻿using Entities.Camera;
-using Sounds;
+﻿using Audio;
+using Entities.Camera;
 using UI;
+using UI.Screens;
 using UnityEngine;
 
 namespace Level
 {
-    public class StartApplication : MonoBehaviour
+    public class ApplicationStart : MonoBehaviour
     {
         [SerializeField] private ScreensController _screensController;
         [SerializeField] private CameraManager _cameraManager;
-        [SerializeField] private StagesManager _stagesManager = new();
+        [SerializeField] private StagesManager _stagesManager;
+        [SerializeField] private AudioManager _audioManager;
         
         private int _score;
 

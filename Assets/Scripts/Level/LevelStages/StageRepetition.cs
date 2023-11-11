@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Audio;
 using Entities.Numbers;
-using Entities.Numbers.Data;
 using Services;
-using Sounds;
 using UnityEngine;
+using AudioType = Audio.AudioType;
 
 namespace Level.LevelStages
 {
@@ -18,17 +18,13 @@ namespace Level.LevelStages
         [SerializeField] private List<int> _availableNumbers = new();
 
         private LevelDataConfig _levelDataConfig;
-        private AudioSource _audioSource;
-        private SoundsConfig _sounds;
         
         private readonly CancellationTokenSource _cancellationTokenSource = new();
 
         public event Action OnNextStage;
         
-        public void Initialize(LevelDataConfig levelDataConfig, AudioSource audioSource,SoundsConfig sounds )
+        public StageRepetition(LevelDataConfig levelDataConfig, AudioManager audioManager) : base(audioManager)
         {
-            _audioSource = audioSource;
-            _sounds = sounds;
             _levelDataConfig = levelDataConfig;
             InitAvailableNumbers(10);
         }
@@ -94,8 +90,10 @@ namespace Level.LevelStages
         private void ShowNextNumber()
         {
             int randomNumber = GetRandomNumber();
-            AudioClip numberVoice = _sounds.GetNumberVoice(randomNumber);
-            SoundsManager.RunSound(_audioSource,numberVoice );
+            AudioClip numberVoiceSound = AudioManager.Sounds.GetNumberVoice(randomNumber);
+            AudioClip effectSound = AudioManager.Sounds.Appearing;
+            AudioManager.PlaySound(AudioType.Voice, numberVoiceSound);
+            AudioManager.PlaySound(AudioType.Effect, effectSound);
             _numberControl.SetNumber(randomNumber);
         }
 

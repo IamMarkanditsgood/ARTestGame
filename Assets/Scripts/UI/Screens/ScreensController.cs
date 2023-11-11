@@ -1,19 +1,15 @@
-using Sounds;
-using UI.Panels;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace UI
+namespace UI.Screens
 {
     public class ScreensController : MonoBehaviour
     {
-        [SerializeField] private MainMenu _mainMenu;
-        [SerializeField] private GameMenu _gameMenu;
-        [SerializeField] private GameResult _gameResult;
-        [SerializeField] private AudioSource _audioSource;
-        [SerializeField] private SoundsConfig _sounds;
+        [SerializeField] private MainMenu.MainMenu _mainMenu;
+        [SerializeField] private GameMenu.GameMenu _gameMenu;
+        [SerializeField] private GameResult.GameResult _gameResult;
         
-        private BaseView _activeScreen;
+        private BaseScreen _activeScreen;
 
         private void Start()
         {
@@ -36,7 +32,7 @@ namespace UI
             _gameResult.OnRestart -= RestartLevel;
         }
 
-        private void ShowScreen(BaseView nextScreen)
+        private void ShowScreen(BaseScreen nextScreen)
         {
             if (_activeScreen != null)
             {
@@ -48,7 +44,6 @@ namespace UI
 
         private void RestartLevel()
         {
-            SoundsManager.RunSound(_audioSource, _sounds.PressButton);
             int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
             SceneManager.LoadScene(currentSceneIndex);
         }

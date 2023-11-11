@@ -1,19 +1,19 @@
 ﻿using System;
-using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
-using Entities.Camera;
+using Audio;
 using Entities.Numbers.Data;
 using Services;
-using Sounds;
 using UI;
+using UI.Screens.GameMenu;
 using UnityEngine;
+using AudioType = Audio.AudioType;
 using Random = System.Random;
 
 namespace Level.LevelStages
 {
     [Serializable]
-    public class StageTest: BaseStage, IDisposable
+    public class StageTest : BaseStage, IDisposable
     {
         [SerializeField] private WordsData[] _wordData;
         [SerializeField] private NumberButtons _numberButtons;
@@ -26,9 +26,7 @@ namespace Level.LevelStages
         private bool _isStageStarted;
         private bool _isAwaitInUse;
         private LevelDataConfig _levelDataConfig;
-        private AudioSource _audioSource;
-        private SoundsConfig _sounds;
-        
+
         private readonly CancellationTokenSource _cancellationTokenSource = new();
 
         public event Action OnWin;
@@ -36,24 +34,22 @@ namespace Level.LevelStages
         public event Action OnWrongAnswer;
         public event Action OnStageStarted;
 
-        public void Initialize(LevelDataConfig levelDataConfig, AudioSource audioSource,SoundsConfig sounds )
+        public StageTest(LevelDataConfig levelDataConfig, AudioManager audioManager) : base(audioManager)
         {
-            _audioSource = audioSource;
-            _sounds = sounds;
             _levelDataConfig = levelDataConfig;
             Subscribe();
         }
-        
+
         private void Subscribe()
         {
             _numberButtons.OnAnswer += CheckAnswer;
         }
-        
+
         private void UnSubscribe()
         {
             _numberButtons.OnAnswer -= CheckAnswer;
         }
-        
+
         public override void PlayStage()
         {
             CheckStageStatus();
@@ -63,16 +59,16 @@ namespace Level.LevelStages
         {
             TaskCompletionSource<bool> completionSource = new();
             cancellationToken.Register(() => completionSource.TrySetCanceled());
-            
-            SoundsManager.RunSound(_audioSource,_sounds.TestStage);
-            int delayTime = SoundsManager.GetTimeOfSound(_sounds.TestStage) + 1;
-            
+
+            AudioManager.PlaySound(AudioType.Voice, AudioManager.Sounds.TestStage);
+            int delayTime = AudioManager.GetTimeOfSound(AudioManager.Sounds.TestStage) + 1;
+
             await Task.Delay(delayTime * Constants.SecondsByMillisecond, cancellationToken);
-            
+
             OnStageStarted?.Invoke();
             _isStageStarted = true;
         }
-        
+
         public void Dispose()
         {
             UnSubscribe();
@@ -85,19 +81,20 @@ namespace Level.LevelStages
                 _isAwaitInUse = true;
                 await WaitForNextStage(_cancellationTokenSource.Token);
             }
+
             if (_isStageStarted)
             {
                 if (_score < _levelDataConfig.ScoreForWin && !_waitForAnswer)
                 {
                     SetQuestion();
                 }
-                else if(_score == _levelDataConfig.ScoreForWin)
+                else if (_score == _levelDataConfig.ScoreForWin)
                 {
                     OnWin?.Invoke();
                 }
             }
         }
-        
+
         private void CheckAnswer(int answer)
         {
             if (answer == _questionNumber)
@@ -113,12 +110,12 @@ namespace Level.LevelStages
                 OnWrongAnswer?.Invoke();
             }
         }
-        
+
         private void SetQuestion()
         {
             SetNumberForQuestion();
             SetWordForQuestion();
-            
+
             _waitForAnswer = true;
             _numberButtons.SetInteractable(true);
         }
@@ -126,17 +123,24 @@ namespace Level.LevelStages
         private void SetNumberForQuestion()
         {
             int randomNumber = _random.Next(1, 11);
-            AudioClip numberVoice = _sounds.GetNumberVoice(randomNumber);
-            SoundsManager.RunSound(_audioSource,numberVoice );
             _questionNumber = randomNumber;
         }
-        
+
         private void SetWordForQuestion()
         {
             _questionWord = GetWord(_questionNumber);
             _questionWord.SetActive(true);
+            PlaySounds();
         }
-        
+
+        private void PlaySounds()
+        {
+            AudioClip numberVoiceSound = AudioManager.Sounds.GetNumberVoice(_questionNumber);
+            AudioClip effectSound = AudioManager.Sounds.Appearing;
+            AudioManager.PlaySound(AudioType.Voice, numberVoiceSound);
+            AudioManager.PlaySound(AudioType.Effect, effectSound);
+        }
+
         private GameObject GetWord(int number)
         {
             foreach (var word in _wordData)
@@ -146,7 +150,7 @@ namespace Level.LevelStages
                     return word.Prefab;
                 }
             }
-            
+
             Debug.LogError("You do not have this word!");
             return null;
         }

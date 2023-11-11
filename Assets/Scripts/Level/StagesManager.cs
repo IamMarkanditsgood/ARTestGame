@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Audio;
 using Level.LevelStages;
 using Services;
-using Sounds;
 using UnityEngine;
+using AudioType = Audio.AudioType;
 
 namespace Level
 {
@@ -16,12 +17,11 @@ namespace Level
         [SerializeField] private LevelDataConfig _levelDataConfig;
         [SerializeField] private StageRepetition _stageRepetition;
         [SerializeField] private StageTest _stageTest;
-        [SerializeField] private AudioSource _audioSource;
-        [SerializeField] private SoundsConfig _sounds;
-        
+
+        private AudioManager _audioManager;
         private BaseStage _currentStage;
         private BaseStage[] _stagesInLevel;
-        
+
         private readonly CancellationTokenSource _cancellationTokenSource = new();
 
         public StageRepetition StageRepetition
@@ -29,6 +29,7 @@ namespace Level
             get => _stageRepetition;
             set => _stageRepetition = value;
         }
+
         public StageTest StageTest
         {
             get => _stageTest;
@@ -40,11 +41,12 @@ namespace Level
             get => _isGameStarted;
             set => _isGameStarted = value;
         }
-        
+
         public void InitializeStages()
         {
-            _stageRepetition.Initialize(_levelDataConfig, _audioSource, _sounds);
-            _stageTest.Initialize(_levelDataConfig, _audioSource, _sounds);
+            _audioManager = AudioManager.Instance;
+            _stageRepetition = new StageRepetition(_levelDataConfig, _audioManager);
+            _stageTest = new StageTest(_levelDataConfig, _audioManager);
             _currentStage = _stageRepetition;
             _stagesInLevel = new BaseStage[] { _stageRepetition, _stageTest };
         }
@@ -56,16 +58,17 @@ namespace Level
                 _currentStage.PlayStage();
             }
         }
+
         public async Task WaitForVoice(CancellationToken cancellationToken, int delayTime)
         {
             TaskCompletionSource<bool> completionSource = new();
             cancellationToken.Register(() => completionSource.TrySetCanceled());
 
             await Task.Delay(delayTime * Constants.SecondsByMillisecond, cancellationToken);
-            
+
             _isGameStarted = true;
         }
-        
+
         public void ChangeCurrentStage()
         {
             _currentStageIndex++;
@@ -74,8 +77,8 @@ namespace Level
 
         public async void StartGame()
         {
-            SoundsManager.RunSound(_audioSource, _sounds.Greeting);
-            int delayTime = SoundsManager.GetTimeOfSound(_sounds.Greeting) + 1;
+            _audioManager.PlaySound(AudioType.Voice, _audioManager.Sounds.Greeting);
+            int delayTime = _audioManager.GetTimeOfSound(_audioManager.Sounds.Greeting) + 1;
             await WaitForVoice(_cancellationTokenSource.Token, delayTime);
         }
     }

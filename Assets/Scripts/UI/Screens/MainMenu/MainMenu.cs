@@ -1,9 +1,9 @@
 using TMPro;
 using UnityEngine;
 
-namespace UI.Panels
+namespace UI.Screens.MainMenu
 {
-    public class MainMenu : BaseView
+    public class MainMenu : BaseScreen
     {
         [SerializeField] private TMP_Text _text;
 

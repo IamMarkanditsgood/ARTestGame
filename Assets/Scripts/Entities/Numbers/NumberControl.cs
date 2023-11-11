@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Entities.Numbers.Data;
-using TMPro;
 using UnityEngine;
 
 namespace Entities.Numbers
@@ -125,7 +124,7 @@ namespace Entities.Numbers
             {
                 return number.Mesh;
             }
-            Debug.LogError("You do not have this digit!");
+            Debug.LogError("You do not have this digit: " + digit);
             return null;
         }
 
@@ -135,7 +134,7 @@ namespace Entities.Numbers
             {
                 return number.Material;
             }
-            Debug.LogError("You do not have this digit!");
+            Debug.LogError("You do not have this digit!" + digit);
             return null;
         }
     }

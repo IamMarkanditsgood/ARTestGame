@@ -1,15 +1,20 @@
 using TMPro;
 using UnityEngine;
 
-namespace UI.Panels
+namespace UI.Screens.GameMenu
 {
-    public class GameMenu : BaseView
+    public class GameMenu : BaseScreen
     {
         [SerializeField] private TMP_Text _score;
         [SerializeField] private GameObject _wrongMessagePanel;
         [SerializeField] private GameObject _correctMessagePanel;
         [SerializeField] private int _delayTimeForOffPanel;
         [SerializeField] private NumberButtons _numberButtons;
+
+        private void Start()
+        {
+            _numberButtons.Initialize(AudioManager);
+        }
 
         public void ShowNewScore(int value)
         {

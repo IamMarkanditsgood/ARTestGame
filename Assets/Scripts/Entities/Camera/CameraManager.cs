@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Entities.Numbers.Data;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
@@ -17,9 +16,8 @@ namespace Entities.Camera
 
         private Vector2 _touchPosition;
         private bool _isGameStarted;
-        
+
         public event Action OnPlay;
-        
 
         private void Start()
         {
@@ -36,13 +34,13 @@ namespace Entities.Camera
             _planeMarkerPrefab.SetActive(false);
         }
 
-        private  List<ARRaycastHit> ShootRayCastToPlanes()
+        private List<ARRaycastHit> ShootRayCastToPlanes()
         {
-            List<ARRaycastHit> hits = new List<ARRaycastHit>();
+            List<ARRaycastHit> hits = new();
             _arRaycastManagerScript.Raycast(new Vector2(width / 2, height / 2), hits, TrackableType.Planes);
             return hits;
         }
-        
+
         private void ShowMarker()
         {
             if (!_isGameStarted)
@@ -63,12 +61,17 @@ namespace Entities.Camera
             List<ARRaycastHit> hits = ShootRayCastToPlanes();
             if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
             {
-                OnPlay?.Invoke();
-                _scene.transform.position = hits[0].pose.position;
-                _scene.transform.LookAt(_arRaycastManagerScript.transform);
-                _scene.SetActive(true);
-                _isGameStarted = true;
+                Touched(hits);
             }
+        }
+
+        private void Touched(List<ARRaycastHit> hits)
+        {
+            OnPlay?.Invoke();
+            _scene.transform.position = hits[0].pose.position;
+            _scene.transform.LookAt(_arRaycastManagerScript.transform);
+            _scene.SetActive(true);
+            _isGameStarted = true;
         }
     }
 }
