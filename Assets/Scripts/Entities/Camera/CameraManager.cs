@@ -1,46 +1,74 @@
 using System;
+using System.Collections.Generic;
+using Entities.Numbers.Data;
 using UnityEngine;
+using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
+using static UnityEngine.Screen;
 
 namespace Entities.Camera
 {
     public class CameraManager : MonoBehaviour
     {
-        [SerializeField] private bool _isInteractable;
+        [Header("Put your planeMarker here")]
+        [SerializeField] private GameObject _planeMarkerPrefab;
+        [SerializeField] private GameObject _scene;
+        [SerializeField] private ARRaycastManager _arRaycastManagerScript;
 
-        public event Action<int> OnAnswer;
+        private Vector2 _touchPosition;
+        private bool _isGameStarted;
         
-        public bool IsInteractable
+        public event Action OnPlay;
+        
+
+        private void Start()
         {
-            set => _isInteractable = value;
+            Initialize();
         }
 
         private void Update()
         {
-            InteractWithWorld();
+            ShowMarker();
         }
 
-        private void InteractWithWorld()
+        private void Initialize()
         {
-            if (!_isInteractable) return;
-            
-            int number = GetResult();
-            if (number != 0)
-            {
-                _isInteractable = false;
-                OnAnswer?.Invoke(number);
-            }
+            _planeMarkerPrefab.SetActive(false);
+        }
+
+        private  List<ARRaycastHit> ShootRayCastToPlanes()
+        {
+            List<ARRaycastHit> hits = new List<ARRaycastHit>();
+            _arRaycastManagerScript.Raycast(new Vector2(width / 2, height / 2), hits, TrackableType.Planes);
+            return hits;
         }
         
-        private int GetResult()
+        private void ShowMarker()
         {
-            for (int index = 1; index <= 9; index++)
+            if (!_isGameStarted)
             {
-                if (Input.GetKeyDown(index.ToString()))
+                List<ARRaycastHit> hits = ShootRayCastToPlanes();
+                if (hits.Count > 0)
                 {
-                    return index;
+                    _planeMarkerPrefab.transform.position = hits[0].pose.position;
+                    _planeMarkerPrefab.SetActive(true);
                 }
+
+                CheckTouch();
             }
-            return 0;
+        }
+
+        private void CheckTouch()
+        {
+            List<ARRaycastHit> hits = ShootRayCastToPlanes();
+            if (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
+            {
+                OnPlay?.Invoke();
+                _scene.transform.position = hits[0].pose.position;
+                _scene.transform.LookAt(_arRaycastManagerScript.transform);
+                _scene.SetActive(true);
+                _isGameStarted = true;
+            }
         }
     }
 }

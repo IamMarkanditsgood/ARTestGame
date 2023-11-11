@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Entities.Numbers.Data;
+using TMPro;
 using UnityEngine;
 
 namespace Entities.Numbers
@@ -81,20 +82,16 @@ namespace Entities.Numbers
             for (int i = 1; i < _number.Count; i++)
             {
                 GameObject digit = GetNewPresenceDigit(i);
-                SetNewDigitPosition(digit, i);
+                SetNewDigitTransform(digit, i);
                 SetNewDigitView(digit, i);
             }
         }
 
-        private void SetNewDigitPosition(GameObject digit, int increaseIndex)
+        private void SetNewDigitTransform(GameObject digit, int increaseIndex)
         {
-            Vector3 position = gameObject.transform.position;
-            var localScale = gameObject.transform.localScale;
-                
-            position.x -= localScale.x * increaseIndex;
-            digit.transform.position = position;
-            position.x += localScale.x * increaseIndex;
-            gameObject.transform.position = position/2;
+            digit.transform.localPosition = new Vector3(-increaseIndex, 0, 0);
+            digit.transform.localScale = gameObject.transform.localScale;
+            digit.transform.localRotation = gameObject.transform.localRotation;
         }
         
         private void SetNewDigitView(GameObject digit,int numberIndex)
@@ -113,6 +110,7 @@ namespace Entities.Numbers
         {
             GameObject emptyObject = new GameObject("EmptyObject");
             GameObject newDigit = Instantiate(emptyObject, gameObject.transform, true);
+            newDigit.transform.parent = gameObject.transform; 
             _digits.Add(newDigit);
             
             newDigit.AddComponent<MeshFilter>();

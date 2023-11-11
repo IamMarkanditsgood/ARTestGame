@@ -1,23 +1,12 @@
-using System;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.Panels
 {
     public class MainMenu : BaseView
     {
-        [SerializeField] private Button _play;
+        [SerializeField] private TMP_Text _text;
 
-        public event Action OnPlay;
-        
-        private void Start()
-        {
-            _play.onClick.AddListener(PlayClicked);
-        }
-
-        private void PlayClicked()
-        {
-            OnPlay?.Invoke();
-        }
+        public TMP_Text Text => _text;
     }
 }

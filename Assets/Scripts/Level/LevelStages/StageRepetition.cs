@@ -25,11 +25,10 @@ namespace Level.LevelStages
 
         public event Action OnNextStage;
         
-        public void Initialize(InteractableNumbersData interactableNumbers, LevelDataConfig levelDataConfig, AudioSource audioSource,SoundsConfig sounds )
+        public void Initialize(LevelDataConfig levelDataConfig, AudioSource audioSource,SoundsConfig sounds )
         {
             _audioSource = audioSource;
             _sounds = sounds;
-            InteractableNumbers = interactableNumbers;
             _levelDataConfig = levelDataConfig;
             InitAvailableNumbers(10);
         }
@@ -97,7 +96,6 @@ namespace Level.LevelStages
             int randomNumber = GetRandomNumber();
             AudioClip numberVoice = _sounds.GetNumberVoice(randomNumber);
             SoundsManager.RunSound(_audioSource,numberVoice );
-            InteractableNumbers.ShowInteractableNumber(randomNumber);
             _numberControl.SetNumber(randomNumber);
         }
 

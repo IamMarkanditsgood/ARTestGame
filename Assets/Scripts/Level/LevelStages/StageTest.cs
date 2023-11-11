@@ -6,6 +6,7 @@ using Entities.Camera;
 using Entities.Numbers.Data;
 using Services;
 using Sounds;
+using UI;
 using UnityEngine;
 using Random = System.Random;
 
@@ -15,7 +16,7 @@ namespace Level.LevelStages
     public class StageTest: BaseStage, IDisposable
     {
         [SerializeField] private WordsData[] _wordData;
-        [SerializeField] private CameraManager _cameraManager;
+        [SerializeField] private NumberButtons _numberButtons;
         [SerializeField] private GameObject _questionWord;
         [SerializeField] private int _questionNumber;
 
@@ -33,24 +34,24 @@ namespace Level.LevelStages
         public event Action OnWin;
         public event Action OnCorrectAnswer;
         public event Action OnWrongAnswer;
-        
-        public void Initialize(InteractableNumbersData interactableNumbers, LevelDataConfig levelDataConfig, AudioSource audioSource,SoundsConfig sounds )
+        public event Action OnStageStarted;
+
+        public void Initialize(LevelDataConfig levelDataConfig, AudioSource audioSource,SoundsConfig sounds )
         {
             _audioSource = audioSource;
             _sounds = sounds;
-            InteractableNumbers = interactableNumbers;
             _levelDataConfig = levelDataConfig;
             Subscribe();
         }
         
         private void Subscribe()
         {
-            _cameraManager.OnAnswer += CheckAnswer;
+            _numberButtons.OnAnswer += CheckAnswer;
         }
         
         private void UnSubscribe()
         {
-            _cameraManager.OnAnswer -= CheckAnswer;
+            _numberButtons.OnAnswer -= CheckAnswer;
         }
         
         public override void PlayStage()
@@ -68,6 +69,7 @@ namespace Level.LevelStages
             
             await Task.Delay(delayTime * Constants.SecondsByMillisecond, cancellationToken);
             
+            OnStageStarted?.Invoke();
             _isStageStarted = true;
         }
         
@@ -107,7 +109,7 @@ namespace Level.LevelStages
             }
             else
             {
-                _cameraManager.IsInteractable = true;
+                _numberButtons.SetInteractable(true);
                 OnWrongAnswer?.Invoke();
             }
         }
@@ -118,7 +120,7 @@ namespace Level.LevelStages
             SetWordForQuestion();
             
             _waitForAnswer = true;
-            _cameraManager.IsInteractable = true;
+            _numberButtons.SetInteractable(true);
         }
 
         private void SetNumberForQuestion()

@@ -9,6 +9,7 @@ namespace UI.Panels
         [SerializeField] private GameObject _wrongMessagePanel;
         [SerializeField] private GameObject _correctMessagePanel;
         [SerializeField] private int _delayTimeForOffPanel;
+        [SerializeField] private NumberButtons _numberButtons;
 
         public void ShowNewScore(int value)
         {
@@ -28,7 +29,11 @@ namespace UI.Panels
             _wrongMessagePanel.SetActive(false);
             StartCoroutine(HidePanelAfterDelay(_correctMessagePanel));
         }
-        
+
+        public void ShowNumberButton()
+        {
+            _numberButtons.gameObject.SetActive(true);
+        }
         private System.Collections.IEnumerator HidePanelAfterDelay(GameObject panel)
         {
             var delayTime = _delayTimeForOffPanel;

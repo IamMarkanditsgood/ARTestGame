@@ -1,4 +1,3 @@
-using System;
 using Sounds;
 using UI.Panels;
 using UnityEngine;
@@ -16,8 +15,6 @@ namespace UI
         
         private BaseView _activeScreen;
 
-        public event Action OnPlay;
-
         private void Start()
         {
             _activeScreen = _mainMenu;
@@ -31,13 +28,11 @@ namespace UI
         
         private void Subscribe()
         {
-            _mainMenu.OnPlay += ShowGameMenu;
             _gameResult.OnRestart += RestartLevel;
         }
         
         private void Unsubscribe()
         {
-            _mainMenu.OnPlay -= ShowGameMenu;
             _gameResult.OnRestart -= RestartLevel;
         }
 
@@ -51,13 +46,6 @@ namespace UI
             nextScreen.Show();
         }
 
-        private void ShowGameMenu()
-        {
-            SoundsManager.RunSound(_audioSource, _sounds.PressButton);
-            OnPlay?.Invoke();
-            ShowScreen(_gameMenu);
-        }
-
         private void RestartLevel()
         {
             SoundsManager.RunSound(_audioSource, _sounds.PressButton);
@@ -65,6 +53,15 @@ namespace UI
             SceneManager.LoadScene(currentSceneIndex);
         }
         
+        public void ShowGameMenu()
+        {
+            ShowScreen(_gameMenu);
+        }
+
+        public void ShowNumberButtons()
+        {
+            _gameMenu.ShowNumberButton();
+        }
         public void ShowGameResult()
         {
             ShowScreen(_gameResult);

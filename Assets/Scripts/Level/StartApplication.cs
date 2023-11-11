@@ -1,4 +1,5 @@
-﻿using Sounds;
+﻿using Entities.Camera;
+using Sounds;
 using UI;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ namespace Level
     public class StartApplication : MonoBehaviour
     {
         [SerializeField] private ScreensController _screensController;
+        [SerializeField] private CameraManager _cameraManager;
         [SerializeField] private StagesManager _stagesManager = new();
         
         private int _score;
@@ -29,22 +31,29 @@ namespace Level
 
         private void Subscribe()
         {
-            _screensController.OnPlay += _stagesManager.StartGame;
+            _cameraManager.OnPlay += StartGame;
             _stagesManager.StageRepetition.OnNextStage += _stagesManager.ChangeCurrentStage;
             _stagesManager.StageTest.OnWin += WinGame;
             _stagesManager.StageTest.OnCorrectAnswer += CorrectAnswer;
             _stagesManager.StageTest.OnWrongAnswer += WrongAnswer;
+            _stagesManager.StageTest.OnStageStarted += _screensController.ShowNumberButtons;
         }
         
         private void Unsubscribe()
         {
-            _screensController.OnPlay -= _stagesManager.StartGame;
+            _cameraManager.OnPlay -= StartGame;
             _stagesManager.StageRepetition.OnNextStage -= _stagesManager.ChangeCurrentStage;
             _stagesManager.StageTest.OnWin -= WinGame;
             _stagesManager.StageTest.OnCorrectAnswer -= CorrectAnswer;
             _stagesManager.StageTest.OnWrongAnswer -= WrongAnswer;
+            _stagesManager.StageTest.OnStageStarted -= _screensController.ShowNumberButtons;
         }
-        
+
+        private void StartGame()
+        {
+            _screensController.ShowGameMenu();
+            _stagesManager.StartGame();
+        }
         private void WinGame()
         {
             _stagesManager.IsGameStarted = false;

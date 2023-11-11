@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Entities.Numbers.Data;
 using Level.LevelStages;
 using Services;
 using Sounds;
@@ -12,7 +11,6 @@ namespace Level
     [Serializable]
     public class StagesManager
     {
-        [SerializeField] private InteractableNumbersData _interactableNumbers;
         [SerializeField] private int _currentStageIndex;
         [SerializeField] private bool _isGameStarted;
         [SerializeField] private LevelDataConfig _levelDataConfig;
@@ -45,8 +43,8 @@ namespace Level
         
         public void InitializeStages()
         {
-            _stageRepetition.Initialize(_interactableNumbers, _levelDataConfig, _audioSource, _sounds);
-            _stageTest.Initialize(_interactableNumbers, _levelDataConfig, _audioSource, _sounds);
+            _stageRepetition.Initialize(_levelDataConfig, _audioSource, _sounds);
+            _stageTest.Initialize(_levelDataConfig, _audioSource, _sounds);
             _currentStage = _stageRepetition;
             _stagesInLevel = new BaseStage[] { _stageRepetition, _stageTest };
         }

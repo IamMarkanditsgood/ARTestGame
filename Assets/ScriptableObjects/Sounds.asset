@@ -16,7 +16,7 @@ MonoBehaviour:
   _interactions: {fileID: 8300000, guid: 2e81634bbbe1b9147a4d3fefe6f473ac, type: 3}
   _appearing: {fileID: 8300000, guid: 19bbe5ffe008db141abe691efdbc3465, type: 3}
   _greeting: {fileID: 8300000, guid: c5a4943df6b65654987f369fbc27184c, type: 3}
-  _testStage: {fileID: 8300000, guid: 94897a94341f11648850d58cd2626c32, type: 3}
+  _testStage: {fileID: 8300000, guid: 5aeb2283f89a8994c9d078cdf87597dd, type: 3}
   _numbers:
   - {fileID: 8300000, guid: 42dc8d8ba53e0024b9de901d4ccfecee, type: 3}
   - {fileID: 8300000, guid: 8b527ffbc4ed5224ba49a5ccb319acbb, type: 3}
