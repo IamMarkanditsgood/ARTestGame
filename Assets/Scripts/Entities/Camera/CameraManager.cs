@@ -13,6 +13,7 @@ namespace Entities.Camera
         [SerializeField] private GameObject _planeMarkerPrefab;
         [SerializeField] private GameObject _scene;
         [SerializeField] private ARRaycastManager _arRaycastManagerScript;
+        [SerializeField] private Transform _camera;
 
         private Vector2 _touchPosition;
         private bool _isGameStarted;

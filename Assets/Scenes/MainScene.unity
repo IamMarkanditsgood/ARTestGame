@@ -469,7 +469,6 @@ MonoBehaviour:
   - {fileID: 1678106498}
   - {fileID: 1984361150}
   _isInteractable: 0
-  text: {fileID: 0}
 --- !u!1 &113157676
 GameObject:
   m_ObjectHideFlags: 0
@@ -3323,6 +3322,7 @@ MonoBehaviour:
   _planeMarkerPrefab: {fileID: 957619860}
   _scene: {fileID: 423034808}
   _arRaycastManagerScript: {fileID: 1512994781}
+  _camera: {fileID: 769072729}
 --- !u!1 &1512994778
 GameObject:
   m_ObjectHideFlags: 0
@@ -4889,6 +4889,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Scene
       objectReference: {fileID: 0}
+    - target: {fileID: 2235425575063484936, guid: fb1a881adee756840bd53c85d88345ab, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2235425575063484937, guid: fb1a881adee756840bd53c85d88345ab, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -4932,6 +4936,14 @@ PrefabInstance:
     - target: {fileID: 2235425575063484937, guid: fb1a881adee756840bd53c85d88345ab, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7963747284326132617, guid: fb1a881adee756840bd53c85d88345ab, type: 3}
+      propertyPath: InitialModule.startSizeY.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7963747284326132617, guid: fb1a881adee756840bd53c85d88345ab, type: 3}
+      propertyPath: InitialModule.startSizeZ.minMaxState
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb1a881adee756840bd53c85d88345ab, type: 3}

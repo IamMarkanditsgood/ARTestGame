@@ -11,7 +11,6 @@ namespace UI.Screens.GameMenu
     {
         [SerializeField] private Button[] _buttons;
         [SerializeField] private bool _isInteractable;
-        public TMP_Text text;
         private int _currentNumber;
         
         private AudioManager _audioManager;
@@ -34,7 +33,6 @@ namespace UI.Screens.GameMenu
 
         private void ButtonClicked(int index)
         {
-            text.SetText(_currentNumber.ToString());
             if (_isInteractable)
             {
                 _audioManager.PlaySound(AudioType.UI, _audioManager.Sounds.PressButton);
