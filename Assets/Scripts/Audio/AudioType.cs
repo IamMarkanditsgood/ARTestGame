@@ -4,5 +4,6 @@ namespace Audio
     {
         Effect = 0,
         Voice = 1,
+        UI = 2,
     }
 }

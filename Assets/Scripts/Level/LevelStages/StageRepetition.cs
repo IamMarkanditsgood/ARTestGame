@@ -23,8 +23,9 @@ namespace Level.LevelStages
 
         public event Action OnNextStage;
         
-        public StageRepetition(LevelDataConfig levelDataConfig, AudioManager audioManager) : base(audioManager)
+        public void Initialize(LevelDataConfig levelDataConfig, AudioManager audioManager)
         {
+            base.Initialize(audioManager);
             _levelDataConfig = levelDataConfig;
             InitAvailableNumbers(10);
         }

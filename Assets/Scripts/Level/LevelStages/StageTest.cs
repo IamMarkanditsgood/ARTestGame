@@ -34,12 +34,13 @@ namespace Level.LevelStages
         public event Action OnWrongAnswer;
         public event Action OnStageStarted;
 
-        public StageTest(LevelDataConfig levelDataConfig, AudioManager audioManager) : base(audioManager)
+        public void Initialize(LevelDataConfig levelDataConfig, AudioManager audioManager)
         {
+            base.Initialize(audioManager);
             _levelDataConfig = levelDataConfig;
             Subscribe();
         }
-
+        
         private void Subscribe()
         {
             _numberButtons.OnAnswer += CheckAnswer;

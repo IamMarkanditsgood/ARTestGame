@@ -19,7 +19,7 @@ namespace UI.Screens.GameResult
         private void RestartClicked()
         {
             OnRestart?.Invoke();
-            AudioManager.PlaySound(AudioType.Effect, AudioManager.Sounds.PressButton);
+            AudioManager.PlaySound(AudioType.UI, AudioManager.Sounds.PressButton);
         }
     }
 }

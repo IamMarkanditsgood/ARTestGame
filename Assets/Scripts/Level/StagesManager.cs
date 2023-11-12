@@ -45,8 +45,8 @@ namespace Level
         public void InitializeStages()
         {
             _audioManager = AudioManager.Instance;
-            _stageRepetition = new StageRepetition(_levelDataConfig, _audioManager);
-            _stageTest = new StageTest(_levelDataConfig, _audioManager);
+            _stageRepetition.Initialize(_levelDataConfig, _audioManager);
+            _stageTest.Initialize(_levelDataConfig, _audioManager);
             _currentStage = _stageRepetition;
             _stagesInLevel = new BaseStage[] { _stageRepetition, _stageTest };
         }

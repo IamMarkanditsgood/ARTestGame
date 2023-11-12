@@ -4,9 +4,9 @@ namespace Level
 {
     public abstract class BaseStage
     {
-        protected readonly AudioManager AudioManager;
+        protected AudioManager AudioManager;
 
-        public BaseStage(AudioManager audioManager)
+        public void Initialize(AudioManager audioManager)
         {
             AudioManager = audioManager;
         }

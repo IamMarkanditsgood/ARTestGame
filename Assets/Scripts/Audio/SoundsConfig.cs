@@ -5,17 +5,17 @@ namespace Audio
     [CreateAssetMenu(fileName = "Sounds", menuName = "ScriptableObjects/Sounds")]
     public class SoundsConfig : ScriptableObject
     {
+        [Header("UI")]
         [SerializeField] private AudioClip _pressButton;
-        [SerializeField] private AudioClip _interactions;
+        [Header("Effects")]
         [SerializeField] private AudioClip _appearing;
+        [Header("Voices")]
         [SerializeField] private AudioClip _greeting;
         [SerializeField] private AudioClip _testStage;
         [SerializeField] private AudioClip[] _numbers;
 
         public AudioClip PressButton => _pressButton;
 
-        public AudioClip Interactions => _interactions;
-        
         public AudioClip Appearing => _appearing;
 
         public AudioClip Greeting => _greeting;
