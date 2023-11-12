@@ -70,7 +70,7 @@ namespace Entities.Camera
         {
             OnPlay?.Invoke();
             _scene.transform.position = hits[0].pose.position;
-            _scene.transform.LookAt(_arRaycastManagerScript.transform);
+            _scene.transform.LookAt(_camera);
             _scene.SetActive(true);
             _isGameStarted = true;
         }
