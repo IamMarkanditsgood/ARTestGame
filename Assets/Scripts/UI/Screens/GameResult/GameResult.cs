@@ -7,19 +7,5 @@ namespace UI.Screens.GameResult
 {
     public class GameResult : BaseScreen
     {
-        [SerializeField] private Button _restart;
-
-        public event Action OnRestart;
-
-        private void Start()
-        {
-            _restart.onClick.AddListener(RestartClicked);
-        }
-
-        private void RestartClicked()
-        {
-            OnRestart?.Invoke();
-            AudioManager.PlaySound(AudioType.UI, AudioManager.Sounds.PressButton);
-        }
     }
 }

@@ -14,24 +14,8 @@ namespace UI.Screens
         private void Start()
         {
             _activeScreen = _mainMenu;
-            Subscribe();
-        }
-
-        private void OnDestroy()
-        {
-            Unsubscribe();
         }
         
-        private void Subscribe()
-        {
-            _gameResult.OnRestart += RestartLevel;
-        }
-        
-        private void Unsubscribe()
-        {
-            _gameResult.OnRestart -= RestartLevel;
-        }
-
         private void ShowScreen(BaseScreen nextScreen)
         {
             if (_activeScreen != null)
@@ -42,12 +26,6 @@ namespace UI.Screens
             nextScreen.Show();
         }
 
-        private void RestartLevel()
-        {
-            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-            SceneManager.LoadScene(currentSceneIndex);
-        }
-        
         public void ShowGameMenu()
         {
             ShowScreen(_gameMenu);
